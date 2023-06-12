@@ -1,5 +1,7 @@
 module SequenceComparator
 
-# Write your package code here.
+function test_function()
+    return "Hello world!"
+end
 
 end

@@ -2,5 +2,5 @@ using SequenceComparator
 using Test
 
 @testset "SequenceComparator.jl" begin
-    # Write your tests here.
+    @test SequenceComparator.test_function() == "Hello world!"
 end
