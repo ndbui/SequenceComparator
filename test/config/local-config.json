@@ -1,0 +1,6 @@
+{
+    "similarity-metric": {
+        "threshold": 0.5,
+        "metric": "levenshtein"
+    }
+}

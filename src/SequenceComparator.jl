@@ -1,7 +1,10 @@
 module SequenceComparator
+export NcbiGenomeAnnotationParser, app_properties
+include("parsers/ncbi_genome_annotation_parser.jl")
+import JSON
 
-function test_function()
-    return "Hello world!"
-end
+# Load application properties from json file 
+app_properties = JSON.parsefile("config/local-config.json")
+
 
 end
