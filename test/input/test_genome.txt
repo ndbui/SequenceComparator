@@ -1,0 +1,8 @@
+>gene1|identifier [gene=test] [locus_tag=test_0001] [protein=test protein] 
+AAAAAAAAAAGGGGGGGGGG
+AAAAAAAAAAAAAAAAAAAA
+>gene2|identifier [locus_tag=test_0002] [protein=test protein #2] 
+TTTTTTTTTTTTTTTTTTTT
+CCCCCCCCCCCCCCCCCCCC
+
+
