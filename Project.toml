@@ -4,6 +4,7 @@ authors = ["Nick Bui <nicholasbui14@gmail.com> and contributors"]
 version = "1.0.0-DEV"
 
 [deps]
+FastLevenshtein = "f79185a3-a88d-4013-8848-f9f041a6cb9a"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 
 [compat]
