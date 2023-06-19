@@ -6,7 +6,7 @@ export NcbiGenomeAnnotationParser
         """
             parse(path::String)
 
-        Return dictionary containing annotated genome data parsed from a NCBI exported .txt file
+        Return dictionary containing annotated genome data parsed from a NCBI exported .txt file.
         """
         function parse(path::String)
             retval = Dict{String, Dict}()
@@ -47,6 +47,8 @@ export NcbiGenomeAnnotationParser
                         gene_translation = gene_translation * line
                     end
                     retval[gene_id]["gene_translation"] = gene_translation
+                    retval[gene_id]["source_file"] = split(path, '/')[end]
+                    retval[gene_id]["group"] = split(path, '/')[end-1]
                 end
                 
             end

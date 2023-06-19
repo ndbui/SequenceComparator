@@ -1,0 +1,9 @@
+>gene11|identifier [gene=test5] [locus_tag=test_0011] [protein=test protein #11] 
+GTTATGCATTATGCGGTTCA
+CACTGCCCGAACTGGAACGC
+>gene12|identifier [locus_tag=test_0012] [protein=test protein #12] 
+TTTATTTTTTTTTTTTTTTT
+CCCCCCCCCGCCCCCCCCCC
+>gene13|identifier [locus_tag=test_0013] [protein=test protein #13] 
+ACGTTCGACATCGAGATGTC
+TGCTCCCCCGGAGCTTTTAA

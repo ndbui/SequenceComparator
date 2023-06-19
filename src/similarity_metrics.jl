@@ -4,7 +4,7 @@ import FastLevenshtein
     """
         get_similarity(input1, input2, similarity_func)
 
-    Returns similarity between two inputs using the given simliarity function if the similarity function is supported
+    Returns similarity between two inputs using the given simliarity function if the similarity function is supported.
     """
     function get_similarity(input1, input2, similarity_func::String)
         supported_metrics = Dict{String, Any}(
@@ -22,7 +22,7 @@ import FastLevenshtein
     """
         levenshtien_similarity(input1::String, input2::String)
     
-    Returns inverse normalized levenshtein distanve between input1 and input2
+    Returns inverse normalized levenshtein distanve between input1 and input2.
     """
     function levenshtien_similarity(input1::String, input2::String)
         dist = FastLevenshtein.fastlevenshtein(input1, input2)

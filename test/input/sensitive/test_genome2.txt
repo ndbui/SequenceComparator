@@ -1,0 +1,8 @@
+>gene3|identifier [gene=test2] [locus_tag=test_0003] [protein=test protein #3] 
+ACCCTCAAACCCGACTCGAG
+TTTGGCCAATTATTTGTTAT
+>gene4|identifier [locus_tag=test_0004] [protein=test protein #4] 
+TTTTTTTTTTTTTTTTTTTT
+CCCCCCCCCCCCCCCCCCCG
+
+
