@@ -1,0 +1,9 @@
+>gene8|identifier [gene=test4] [locus_tag=test_0008] [protein=test protein #8] 
+CCCTTAATTGACAGCGAGGG
+GAACTTCGGATCCCACAGCG
+>gene9|identifier [locus_tag=test_0009] [protein=test protein #9] 
+TTTTTTTTTTTTTTTTTTTT
+CCCGCCCCCCCCCCCCCCCC
+>gene10|identifier [locus_tag=test_0010] [protein=test protein #10] 
+TCGTTCGACATCGAGATGTC
+TGCTCCACCGGAGCTTTTAA
