@@ -47,8 +47,8 @@ export NcbiGenomeAnnotationParser
                         gene_translation = gene_translation * line
                     end
                     retval[gene_id]["gene_translation"] = gene_translation
-                    retval[gene_id]["genome"] = [String(split(path, '/')[end])]
-                    retval[gene_id]["group"] = split(path, '/')[end-1]
+                    retval[gene_id]["genome"] = [String(split(path, Base.Filesystem.path_separator)[end])]
+                    retval[gene_id]["group"] = split(path, Base.Filesystem.path_separator)[end-1]
                 end
                 
             end

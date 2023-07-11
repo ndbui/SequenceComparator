@@ -4,11 +4,11 @@ using Test
 @testset "SequenceComparator" begin
 
     # Test that application properties load correctly
-    @test SequenceComparator.load_properties("config/test-config.json")["similarity-metric"]["threshold"] == 0.5
-    @test SequenceComparator.load_properties("config/test-config.json")["similarity-metric"]["metric"] == "levenshtein"
+    @test SequenceComparator.load_properties(joinpath("config","test-config.json"))["similarity-metric"]["threshold"] == 0.5
+    @test SequenceComparator.load_properties(joinpath("config","test-config.json"))["similarity-metric"]["metric"] == "levenshtein"
 
     # Test that loading groups of input files is working correctly
-    group, genomes = SequenceComparator.load_group("input/sensitive")
+    group, genomes = SequenceComparator.load_group(joinpath("input","sensitive"))
     @test length(group) == 4
     @test group["gene1|identifier"]["genome"] == ["test_genome1.txt","test_genome2.txt"]
     @test group["gene1|identifier"]["locus_tag"] == "test_0001"
@@ -32,7 +32,7 @@ using Test
     @test sort(collect(keys(common_elements_seq))) == ["gene1|identifier", "gene2|identifier", "gene4|identifier"]
 
     # Test getting common group elements
-    nonsensitive_group, nonsensitive_genomes = SequenceComparator.load_group("input/nonsensitive")
+    nonsensitive_group, nonsensitive_genomes = SequenceComparator.load_group(joinpath("input","nonsensitive"))
     common_elements_group = SequenceComparator.get_common_group_elements(nonsensitive_group, nonsensitive_genomes)
     @test length(common_elements_group) == 6
     @test sort(collect(keys(common_elements_group))) == [
@@ -48,10 +48,10 @@ end
 
 @testset "NcbiGenomeAnnotationParser" begin
     # Test that the ncbi genome annotation parser won't parse non txt files
-    @test_throws ErrorException Parsers.NcbiGenomeAnnotationParser.parse("input/test_genome.pdf")
+    @test_throws ErrorException Parsers.NcbiGenomeAnnotationParser.parse(joinpath("input","test_genome.pdf"))
 
     # Test that the ncbi genome annotation parser is parsing all the genes correctly
-    genome = Parsers.NcbiGenomeAnnotationParser.parse("input/sensitive/test_genome1.txt")
+    genome = Parsers.NcbiGenomeAnnotationParser.parse(joinpath("input","sensitive","test_genome1.txt"))
     gene1 = Dict{String, Any}("gene" => "test", "locus_tag" => "test_0001", "protein" => "test protein", "gene_translation" => "AAAAAAAAAAGGGGGGGGGGAAAAAAAAAAAAAAAAAAAA", "genome" => ["test_genome1.txt"], "group" => "sensitive")
     gene2 = Dict{String, Any}("locus_tag" => "test_0002", "protein" => "test protein #2", "gene_translation" => "TTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCCCCC", "genome" => ["test_genome1.txt"], "group" => "sensitive")
     @test length(genome) == 2
@@ -90,7 +90,7 @@ end
     SequenceComparator.append_dict!(dict1, dict3)
     @test dict1 == Dict{String, String}("a" => "b", "c" => "d", "e" => "f", "g" => "h", "i" => "j")
 
-    genome = Parsers.NcbiGenomeAnnotationParser.parse("input/sensitive/test_genome1.txt")
+    genome = Parsers.NcbiGenomeAnnotationParser.parse(joinpath("input","sensitive","test_genome1.txt"))
     test_dict = Dict{String, Any}()
     SequenceComparator.append_dict!(test_dict, genome)
     @test length(test_dict) == 2

@@ -25,7 +25,7 @@ import JSON, XLSX, Dates, Printf
         retval = Dict{Any, Any}()
         genomes = []
         for file_path in readdir(input_path, join=true)
-            filename = String(split(file_path, '/')[end])
+            filename = basename(file_path)
             if filename[1] != '.'
                 push!(genomes, filename)
                 genome = Parsers.NcbiGenomeAnnotationParser.parse(file_path)
@@ -233,7 +233,7 @@ import JSON, XLSX, Dates, Printf
     Saves genes of interest, control group, and the comparison group into an excel file with each having their own sheet
     """
     function save_excel(genes)
-        output_file = Printf.@sprintf("src/output/seqco_%s.xlsx", Dates.format(Dates.now(), "yyyy-mm-dd_HH-MM-SS"))
+        output_file = Printf.@sprintf("%s_%s.xlsx", load_group(joinpath("src","output","seqco")), Dates.format(Dates.now(), "yyyy-mm-dd_HH-MM-SS"))
         sorted_gene_ids = sort([[gene_id, genes[gene_id]["group_identity"]] for gene_id in collect(keys(genes))], by = x -> x[2], rev=true)
         XLSX.openxlsx(output_file, mode="w") do xf
             # Create the first sheet with the genes of interest
@@ -260,11 +260,11 @@ import JSON, XLSX, Dates, Printf
 
         # Load the control and comparison groups according to the configs
         if app_properties["control_group"] == "sensitive"
-            control_group, control_genomes  = load_group("src/input/sensitive")
-            comparison_group, comparison_genomes = load_group("src/input/nonsensitive")
+            control_group, control_genomes  = load_group(joinpath("src","input","sensitive"))
+            comparison_group, comparison_genomes = load_group(joinpath("src","input","nonsensitive"))
         else
-            comparison_group, comparison_genomes = load_group("src/input/sensitive")
-            control_group, control_genomes = load_group("src/input/nonsensitive")
+            comparison_group, comparison_genomes = load_group(joinpath("src","input","sensitive"))
+            control_group, control_genomes = load_group(joinpath("src","input","nonsensitive"))
         end
 
         # Determine the elements that are common between all genomes in a group and between the two groups
@@ -289,7 +289,7 @@ import JSON, XLSX, Dates, Printf
 
     end
 
-    # main("src/config/local-config.json")
+    # main(joinpath("src","config","local-config.json"))
 
 end
 
