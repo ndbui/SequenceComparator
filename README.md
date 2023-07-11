@@ -3,7 +3,7 @@ SequenceComparator
 [![Build Status](https://github.com/ndbui/SequenceComparator.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/ndbui/SequenceComparator.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 
-This project will primarily be used in the aid of studying how certain genetic elements inhibit growth in strains of bacteria (Streptococci in this instance) by comparing two groups of genomes, where one group is known to inhibit growth, and identifying genetic elements that are shared/distinct between them.
+This project will primarily be used in the aid of studying how certain genetic elements influence the sensitivity of bacterial strains (Streptococci in this instance) to certain small molecules by comparing groups of genomes, where one group is known to have its growth inhibited by the small molecule, and identifying genetic elements that are shared/distinct between them.
 
 
 

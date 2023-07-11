@@ -4,8 +4,13 @@ authors = ["Nick Bui <nicholasbui14@gmail.com> and contributors"]
 version = "1.0.0-DEV"
 
 [deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 FastLevenshtein = "f79185a3-a88d-4013-8848-f9f041a6cb9a"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+LRUCache = "8ac3fa9e-de4c-5943-b1dc-09c6b5f20637"
+Memoize = "c03570c3-d221-55d1-a50c-7939bbd78826"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
 
 [compat]
 julia = "1.9"

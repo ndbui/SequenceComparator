@@ -2,5 +2,7 @@
     "similarity-metric": {
         "threshold": 0.8,
         "metric": "levenshtein"
-    }
+    },
+    "control_group": "sensitive",
+    "group_identity_threshold": 0.0
 }

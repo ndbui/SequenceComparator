@@ -1,6 +1,7 @@
 module SimilarityMetrics
+using Memoize
+using LRUCache
 import FastLevenshtein
-
     """
         get_similarity(input1, input2, similarity_func)
 
@@ -24,7 +25,7 @@ import FastLevenshtein
     
     Returns inverse normalized levenshtein distanve between input1 and input2.
     """
-    function levenshtien_similarity(input1::String, input2::String)
+    @memoize LRU(maxsize=10000) function  levenshtien_similarity(input1::String, input2::String)
         dist = FastLevenshtein.fastlevenshtein(input1, input2)
         max_len = maximum(length, [input1, input2])
         if max_len == 0
