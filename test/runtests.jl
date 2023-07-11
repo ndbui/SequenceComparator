@@ -15,6 +15,10 @@ using Test
     @test group["gene2|identifier"]["locus_tag"] == "test_0002"
     @test group["gene3|identifier"]["locus_tag"] == "test_0003"
     @test group["gene4|identifier"]["locus_tag"] == "test_0004"
+    @test group["gene1|identifier"]["gene_translation"] == "AAAAAAAAAAGGGGGGGGGGAAAAAAAAAAAAAAAAAAAA"
+    @test group["gene2|identifier"]["gene_translation"] == "TTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCCCCC"
+    @test group["gene3|identifier"]["gene_translation"] == "ACCCTCAAACCCGACTCGAGTTTGGCCAATTATTTGTTAT"
+    @test group["gene4|identifier"]["gene_translation"] == "TTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCCCCG"
     @test genomes == ["test_genome1.txt","test_genome2.txt"]
 
     # Test that getting all genes from a target genome works

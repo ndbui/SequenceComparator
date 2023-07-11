@@ -19,7 +19,7 @@ export NcbiGenomeAnnotationParser
 
             # Open and read file
             f = open(path, "r")
-            raw_txt = read(f, String)
+            raw_txt = replace(read(f, String), "\r" => "")
             close(f)
 
             # Split the raw text on the `>` character to get the information pertaining to each gene
