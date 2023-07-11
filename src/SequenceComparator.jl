@@ -172,6 +172,7 @@ import JSON, XLSX, Dates, Printf
                     similar_gene = Dict{String,Any}()
                     similar_gene["gene_id"] = group_ids_index_map[x]
                     similar_gene["protein"] = group[group_ids_index_map[x]]["protein"]
+                    similar_gene["protein_id"] = group[group_ids_index_map[x]]["protein_id"]
                     similar_gene["similarity"] = similarity_matrix[x,y]
                     similar_gene["genome"] = group[group_ids_index_map[x]]["genome"]
                     push!(genes[gene_ids_index_map[y]]["similar_genes"], similar_gene)
@@ -233,7 +234,7 @@ import JSON, XLSX, Dates, Printf
     Saves genes of interest, control group, and the comparison group into an excel file with each having their own sheet
     """
     function save_excel(genes)
-        output_file = Printf.@sprintf("%s_%s.xlsx", load_group(joinpath("src","output","seqco")), Dates.format(Dates.now(), "yyyy-mm-dd_HH-MM-SS"))
+        output_file = Printf.@sprintf("%s_%s.xlsx", joinpath("src","output","seqco"), Dates.format(Dates.now(), "yyyy-mm-dd_HH-MM-SS"))
         sorted_gene_ids = sort([[gene_id, genes[gene_id]["group_identity"]] for gene_id in collect(keys(genes))], by = x -> x[2], rev=true)
         XLSX.openxlsx(output_file, mode="w") do xf
             # Create the first sheet with the genes of interest
