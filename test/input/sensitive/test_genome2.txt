@@ -4,5 +4,8 @@ TTTGGCCAATTATTTGTTAT
 >gene4|identifier [locus_tag=test_0004] [protein=test protein #4] 
 TTTTTTTTTTTTTTTTTTTT
 CCCCCCCCCCCCCCCCCCCG
+>gene1|identifier [gene=test] [locus_tag=test_0001] [protein=test protein] 
+AAAAAAAAAAGGGGGGGGGG
+AAAAAAAAAAAAAAAAAAAA
 
 

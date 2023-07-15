@@ -19,7 +19,7 @@ export NcbiGenomeAnnotationParser
 
             # Open and read file
             f = open(path, "r")
-            raw_txt = read(f, String)
+            raw_txt = replace(read(f, String), "\r" => "")
             close(f)
 
             # Split the raw text on the `>` character to get the information pertaining to each gene
@@ -35,7 +35,7 @@ export NcbiGenomeAnnotationParser
                     # Use the first line for metadata
                     metadata_pairs = split(lines[1], " [")
                     gene_id = metadata_pairs[1]
-                    retval[gene_id] = Dict{String, String}()
+                    retval[gene_id] = Dict{String, Any}()
                     for metadata_pair in metadata_pairs[2:end]
                         kv_split = split(metadata_pair, '=')
                         retval[gene_id][kv_split[1]] = join(kv_split[2:end], '=')[1:end-1]
@@ -47,8 +47,8 @@ export NcbiGenomeAnnotationParser
                         gene_translation = gene_translation * line
                     end
                     retval[gene_id]["gene_translation"] = gene_translation
-                    retval[gene_id]["source_file"] = split(path, '/')[end]
-                    retval[gene_id]["group"] = split(path, '/')[end-1]
+                    retval[gene_id]["genome"] = [String(split(path, Base.Filesystem.path_separator)[end])]
+                    retval[gene_id]["group"] = split(path, Base.Filesystem.path_separator)[end-1]
                 end
                 
             end

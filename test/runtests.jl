@@ -4,24 +4,40 @@ using Test
 @testset "SequenceComparator" begin
 
     # Test that application properties load correctly
-    @test SequenceComparator.load_properties("config/test-config.json")["similarity-metric"]["threshold"] == 0.5
-    @test SequenceComparator.load_properties("config/test-config.json")["similarity-metric"]["metric"] == "levenshtein"
+    @test SequenceComparator.load_properties(joinpath("config","test-config.json"))["similarity-metric"]["threshold"] == 0.5
+    @test SequenceComparator.load_properties(joinpath("config","test-config.json"))["similarity-metric"]["metric"] == "levenshtein"
 
     # Test that loading groups of input files is working correctly
-    group = SequenceComparator.load_group("input/sensitive")
-    @test length(group) == 2
-    @test group["test_genome1.txt"]["gene1|identifier"]["locus_tag"] == "test_0001"
-    @test group["test_genome1.txt"]["gene2|identifier"]["locus_tag"] == "test_0002"
-    @test group["test_genome2.txt"]["gene3|identifier"]["locus_tag"] == "test_0003"
-    @test group["test_genome2.txt"]["gene4|identifier"]["locus_tag"] == "test_0004"
+    group, genomes = SequenceComparator.load_group(joinpath("input","sensitive"))
+    @test length(group) == 4
+    @test group["gene1|identifier"]["genome"] == ["test_genome1.txt","test_genome2.txt"]
+    @test group["gene1|identifier"]["locus_tag"] == "test_0001"
+    @test group["gene2|identifier"]["locus_tag"] == "test_0002"
+    @test group["gene3|identifier"]["locus_tag"] == "test_0003"
+    @test group["gene4|identifier"]["locus_tag"] == "test_0004"
+    @test group["gene1|identifier"]["gene_translation"] == "AAAAAAAAAAGGGGGGGGGGAAAAAAAAAAAAAAAAAAAA"
+    @test group["gene2|identifier"]["gene_translation"] == "TTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCCCCC"
+    @test group["gene3|identifier"]["gene_translation"] == "ACCCTCAAACCCGACTCGAGTTTGGCCAATTATTTGTTAT"
+    @test group["gene4|identifier"]["gene_translation"] == "TTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCCCCG"
+    @test genomes == ["test_genome1.txt","test_genome2.txt"]
+
+    # Test that getting all genes from a target genome works
+    genes = SequenceComparator.get_genome_genes(group, "test_genome1.txt")
+    @test length(genes) == 2
+
+    #Test that the gene similarity matrix within a group is being calculated correctly
+    @test SequenceComparator.get_gene_group_similarity_matrix(group, group, similarity_metric="levenshtein") == [1.0 0.275 0.0 0.0; 0.275 1.0 0.09999999999999998 0.09999999999999998; 0.0 0.09999999999999998 1.0 0.975; 0.0 0.09999999999999998 0.975 1.0]
+    elements_of_interest = Dict{String,Any}("gene1|identifier" => group["gene1|identifier"], "gene2|identifier" => group["gene2|identifier"])
+    @test SequenceComparator.get_gene_group_similarity_matrix(elements_of_interest, group, similarity_metric="levenshtein") == [1.0 0.0; 0.275 0.09999999999999998; 0.0 1.0; 0.0 0.975]
 
     # Test getting common seqeunce elements
-    common_elements_seq = SequenceComparator.get_common_seq_elements(group["test_genome1.txt"], group["test_genome2.txt"])
-    @test length(common_elements_seq) == 2
-    @test sort(collect(keys(common_elements_seq))) == ["gene2|identifier", "gene4|identifier"]
+    common_elements_seq = SequenceComparator.get_common_seq_elements(SequenceComparator.get_genome_genes(group, "test_genome1.txt"), SequenceComparator.get_genome_genes(group, "test_genome2.txt"))
+    @test length(common_elements_seq) == 3
+    @test sort(collect(keys(common_elements_seq))) == ["gene1|identifier", "gene2|identifier", "gene4|identifier"]
 
     # Test getting common group elements
-    common_elements_group = SequenceComparator.get_common_group_elements(SequenceComparator.load_group("input/nonsensitive"))
+    nonsensitive_group, nonsensitive_genomes = SequenceComparator.load_group(joinpath("input","nonsensitive"))
+    common_elements_group = SequenceComparator.get_common_group_elements(nonsensitive_group, nonsensitive_genomes)
     @test length(common_elements_group) == 6
     @test sort(collect(keys(common_elements_group))) == [
         "gene10|identifier",
@@ -36,12 +52,12 @@ end
 
 @testset "NcbiGenomeAnnotationParser" begin
     # Test that the ncbi genome annotation parser won't parse non txt files
-    @test_throws ErrorException Parsers.NcbiGenomeAnnotationParser.parse("input/test_genome.pdf")
+    @test_throws ErrorException Parsers.NcbiGenomeAnnotationParser.parse(joinpath("input","test_genome.pdf"))
 
     # Test that the ncbi genome annotation parser is parsing all the genes correctly
-    genome = Parsers.NcbiGenomeAnnotationParser.parse("input/sensitive/test_genome1.txt")
-    gene1 = Dict{String, String}("gene" => "test", "locus_tag" => "test_0001", "protein" => "test protein", "gene_translation" => "AAAAAAAAAAGGGGGGGGGGAAAAAAAAAAAAAAAAAAAA", "source_file" => "test_genome1.txt", "group" => "sensitive")
-    gene2 = Dict{String, String}("locus_tag" => "test_0002", "protein" => "test protein #2", "gene_translation" => "TTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCCCCC", "source_file" => "test_genome1.txt", "group" => "sensitive")
+    genome = Parsers.NcbiGenomeAnnotationParser.parse(joinpath("input","sensitive","test_genome1.txt"))
+    gene1 = Dict{String, Any}("gene" => "test", "locus_tag" => "test_0001", "protein" => "test protein", "gene_translation" => "AAAAAAAAAAGGGGGGGGGGAAAAAAAAAAAAAAAAAAAA", "genome" => ["test_genome1.txt"], "group" => "sensitive")
+    gene2 = Dict{String, Any}("locus_tag" => "test_0002", "protein" => "test protein #2", "gene_translation" => "TTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCCCCC", "genome" => ["test_genome1.txt"], "group" => "sensitive")
     @test length(genome) == 2
     @test genome["gene1|identifier"] == gene1
     @test genome["gene2|identifier"] == gene2
@@ -78,7 +94,7 @@ end
     SequenceComparator.append_dict!(dict1, dict3)
     @test dict1 == Dict{String, String}("a" => "b", "c" => "d", "e" => "f", "g" => "h", "i" => "j")
 
-    genome = Parsers.NcbiGenomeAnnotationParser.parse("input/sensitive/test_genome1.txt")
+    genome = Parsers.NcbiGenomeAnnotationParser.parse(joinpath("input","sensitive","test_genome1.txt"))
     test_dict = Dict{String, Any}()
     SequenceComparator.append_dict!(test_dict, genome)
     @test length(test_dict) == 2
